@@ -23,13 +23,16 @@ function! termrun#term_start()
     call s:smart_split()
     let g:tr_job_id = termopen($SHELL, {"on_exit": function("s:term_exit")})
     let g:tr_buf_id = bufnr("$")
+    normal! G
     wincmd p
 endfunction
 
 function! termrun#term_run(cmd)
     if a:cmd == "" | return | endif
     if !exists("g:tr_job_id") | call termrun#term_start() | endif
-    call chansend(g:tr_job_id, [a:cmd, ""])
+    let l:cmd_list = deepcopy(split(a:cmd))
+    let l:cmd_list = map(l:cmd_list, "expand(v:val)")
+    call chansend(g:tr_job_id, [join(l:cmd_list), ''])
 endfunction
 
 function! termrun#term_stop()
@@ -38,8 +41,8 @@ function! termrun#term_stop()
     endif
 endfunction
 
-nnoremap <cr>      :call termrun#term_run(g:tr_cmd)<cr>
-nnoremap <leader>r :let g:tr_cmd = ""<left>
-nnoremap <leader>w :let g:tr_write_cmd = ""<left>
+command! -nargs=+ Tw :let g:tr_write_cmd = <q-args> | call termrun#term_run(<q-args>)
+command! -nargs=+ T  :let g:tr_cmd = <q-args> | call termrun#term_run(<q-args>)
 
-autocmd BufWritePost * call termrun#term_run(g:tr_write_cmd)
+nnoremap <cr> :call termrun#term_run(g:tr_cmd)<cr>
+autocmd BufWritePost * silent call termrun#term_run(g:tr_write_cmd)
