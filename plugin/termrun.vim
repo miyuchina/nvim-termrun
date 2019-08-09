@@ -43,6 +43,9 @@ endfunction
 
 command! -nargs=+ Tw :let g:tr_write_cmd = <q-args> | call termrun#term_run(<q-args>)
 command! -nargs=+ T  :let g:tr_cmd = <q-args> | call termrun#term_run(<q-args>)
+command! -nargs=0 Tc :call termrun#term_stop()
 
-nnoremap <cr> :call termrun#term_run(g:tr_cmd)<cr>
+nnoremap <cr>  :silent call termrun#term_run(g:tr_cmd)<cr>
+nnoremap <C-c> :silent call termrun#term_stop()<cr>
+
 autocmd BufWritePost * silent call termrun#term_run(g:tr_write_cmd)
