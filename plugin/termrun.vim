@@ -5,9 +5,9 @@ if !exists("g:tr_write_cmd") | let g:tr_write_cmd = "" | endif
 
 function! s:smart_split()
     if winwidth("%") / 2 > 80
-        execute "vnew | resize " . g:tr_vert_size . " | set bufhidden=delete"
+        execute "vnew | vertical resize " . g:tr_vert_size . " | set bufhidden=delete"
     else
-        execute "new  | resize " . g:tr_size      . " | set bufhidden=delete"
+        execute "new | resize " . g:tr_size      . " | set bufhidden=delete"
     endif
 endfunction
 
