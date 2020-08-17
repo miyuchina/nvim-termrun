@@ -5,10 +5,15 @@ if !exists("g:tr_write_cmd") | let g:tr_write_cmd = "" | endif
 
 function! s:smart_split()
     if winwidth("%") / 2 > 80
-        execute "vnew | vertical resize " . g:tr_vert_size . " | set bufhidden=delete"
+        execute "vnew"
+        execute "set nonumber"
+        execute "vertical resize " . g:tr_vert_size
     else
-        execute "new | resize " . g:tr_size      . " | set bufhidden=delete"
+        execute "new"
+        execute "set nonumber"
+        execute "resize " . g:tr_size
     endif
+    execute "set bufhidden=delete"
 endfunction
 
 function! s:term_exit(job_id, data, event) dict
